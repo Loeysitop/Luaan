@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Carta para un Amigo Especial | BT21</title>
+    <style>
+        /* --- CONFIGURACIÓN DE TUS IMÁGENES --- */
+        :root {
+            --img-bg-body: url('BT211.png');
+            --img-bg-body-mobile: url('Fondocelular.png');
+            --img-corner-tl: url('ShookyCooky.png');
+            --img-corner-br: url('CookyShooky.png');
+            --img-decoration-1: url('BT213.png');
+            --img-decoration-2: url('BT214.png');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Quicksand', system-ui, -apple-system, sans-serif;
+        }
+
+        /* Fondo por defecto (escritorio) */
+        body {
+            background-image: var(--img-bg-body);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px 16px 100px 16px;
+            position: relative;
+            transition: background-image 0.3s ease;
+        }
+
+        /* Fondo específico para móvil */
+        @media (max-width: 768px) {
+            body {
+                background-image: var(--img-bg-body-mobile);
+                background-attachment: scroll;
+                padding-bottom: 95px;
+            }
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: var(--img-decoration-2);
+            background-repeat: repeat;
+            background-size: 48px;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 650px;
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .days-counter {
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            display: inline-block;
+            width: auto;
+            border: 1px solid rgba(255, 180, 138, 0.4);
+        }
+
+        .days-counter p {
+            color: #ffebd2;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .days-counter span {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffaa7a;
+        }
+
+        .envelope {
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(8px);
+            border-radius: 48px 48px 32px 32px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255,255,255,0.15);
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.2s;
+            padding: 48px 24px 52px;
+            position: relative;
+            border: 1px solid rgba(255, 180, 138, 0.4);
+        }
+
+        .envelope:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 28px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .envelope h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff5e6;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            margin-bottom: 16px;
+        }
+
+        .envelope p {
+            font-size: 1.1rem;
+            color: #ffddc4;
+            font-weight: 600;
+            background: rgba(0, 0, 0, 0.35);
+            display: inline-block;
+            padding: 8px 22px;
+            border-radius: 60px;
+            backdrop-filter: blur(4px);
+        }
+
+        .game-container {
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(12px);
+            border-radius: 64px 48px 64px 48px;
+            padding: 24px 18px;
+            border: 1px solid rgba(255, 200, 172, 0.4);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            display: none;
+            margin-top: 12px;
+        }
+
+        .game-container h3 {
+            font-size: 1.5rem;
+            color: #ffebd2;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .game-container h3 span {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-image: var(--img-decoration-1);
+            background-size: cover;
+        }
+
+        .game-subtitle {
+            color: #ffd8bd;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+        }
+
+        .quiz-list {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin: 15px 0 25px;
+        }
+
+        .quiz-item {
+            background: rgba(30, 20, 15, 0.6);
+            backdrop-filter: blur(4px);
+            border-radius: 24px;
+            padding: 14px 16px;
+            border: 1px solid rgba(255, 180, 138, 0.3);
+        }
+
+        .quiz-item.completed {
+            background: rgba(50, 80, 45, 0.5);
+            border-color: #a8e6a0;
+        }
+
+        .quiz-question {
+            color: #ffebd2;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .quiz-emoji {
+            font-size: 1.3rem;
+        }
+
+        .quiz-input-area {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .quiz-input {
+            flex: 1;
+            padding: 8px 14px;
+            border-radius: 40px;
+            border: none;
+            background: rgba(255, 245, 235, 0.9);
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        .quiz-btn {
+            background: rgba(255, 182, 139, 0.9);
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-weight: bold;
+            color: #3b2216;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .quiz-status {
+            font-size: 0.75rem;
+            margin-top: 6px;
+            color: #ffd8bd;
+        }
+
+        .quiz-status.correct {
+            color: #a8e6a0;
+        }
+
+        .quiz-status.incorrect {
+            color: #ffaa88;
+        }
+
+        .progress-section {
+            margin-top: 15px;
+        }
+
+        .progress-text {
+            color: #ffd8bd;
+            font-weight: bold;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+        }
+
+        .progress-bar-bg {
+            height: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ff9a6e, #ffd4a8);
+            border-radius: 20px;
+            transition: width 0.3s ease;
+        }
+
+        .btn-reset {
+            background: rgba(255, 182, 139, 0.8);
+            border: none;
+            padding: 10px 22px;
+            font-size: 0.9rem;
+            border-radius: 50px;
+            font-weight: bold;
+            color: #3b2216;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .final-letter {
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(14px);
+            border-radius: 50px 35px 50px 35px;
+            padding: 24px 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 203, 176, 0.5);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+            display: none;
+            position: relative;
+        }
+
+        .final-letter .deco-corner {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            pointer-events: none;
+        }
+
+        .deco-corner.top-left {
+            top: -12px;
+            left: -12px;
+            background-image: var(--img-corner-tl);
+        }
+
+        .deco-corner.bottom-right {
+            bottom: -12px;
+            right: -12px;
+            background-image: var(--img-corner-br);
+            transform: rotate(5deg);
+        }
+
+        .letter-content p {
+            font-size: 0.95rem;
+            line-height: 1.55;
+            margin-bottom: 16px;
+            color: #fff0e4;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .letter-signature {
+            text-align: right;
+            margin-top: 20px;
+            font-style: italic;
+            font-weight: bold;
+            border-top: 1px dashed rgba(255, 203, 176, 0.6);
+            padding-top: 14px;
+            color: #ffcdac;
+            font-size: 0.9rem;
+        }
+
+        /* ============================================
+           REPRODUCTOR DE MÚSICA - ESCRITORIO
+        ============================================ */
+        @media (min-width: 769px) {
+            #musicPlayer {
+                position: fixed;
+                bottom: 20px;
+                left: 20px;
+                background: rgba(0, 0, 0, 0.65);
+                backdrop-filter: blur(12px);
+                border-radius: 40px;
+                padding: 10px 18px;
+                width: 270px;
+                box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+                border: 1px solid rgba(255, 195, 160, 0.4);
+                z-index: 999;
+                transition: all 0.2s ease;
+            }
+
+            #albumArt {
+                width: 48px;
+                height: 48px;
+                border-radius: 28px;
+                margin-right: 12px;
+                border: 1px solid #ffaa7a;
+                object-fit: cover;
+            }
+
+            .music-info {
+                display: flex;
+                align-items: center;
+            }
+
+            .song-title {
+                font-size: 0.7rem;
+                font-weight: bold;
+                color: #ffd8bd;
+            }
+
+            .progress-container {
+                height: 4px;
+                background: rgba(255,255,255,0.2);
+                border-radius: 4px;
+                margin: 6px 0;
+                cursor: pointer;
+            }
+
+            .progress-bar {
+                width: 0%;
+                height: 100%;
+                background: #ffaa7a;
+                border-radius: 4px;
+            }
+
+            .time-display {
+                display: flex;
+                justify-content: space-between;
+                font-size: 0.6rem;
+                color: #dbbca0;
+            }
+
+            .music-controls {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 6px;
+                gap: 8px;
+            }
+
+            .control-icon, .volume-icon {
+                width: 24px;
+                cursor: pointer;
+                flex-shrink: 0;
+            }
+
+            .volume-control {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                flex: 1;
+            }
+
+            .volume-slider-container {
+                position: relative;
+                width: 100px;
+                height: 4px;
+                flex: 1;
+            }
+
+            .volume-bg {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(255,255,255,0.2);
+                border-radius: 4px;
+            }
+
+            .volume-fill {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 60%;
+                background: #ffaa7a;
+                border-radius: 4px;
+                transition: width 0.05s linear;
+                pointer-events: none;
+            }
+
+            .volume-slider {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+                cursor: pointer;
+                z-index: 2;
+            }
+        }
+
+        /* ============================================
+           REPRODUCTOR DE MÚSICA - MÓVIL (BOTTOM BAR)
+        ============================================ */
+        @media (max-width: 768px) {
+            #musicPlayer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+                background: rgba(0, 0, 0, 0.85);
+                backdrop-filter: blur(12px);
+                border-top: 1px solid rgba(255, 195, 160, 0.4);
+                padding: 10px 16px;
+                z-index: 999;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            #albumArt {
+                width: 44px;
+                height: 44px;
+                border-radius: 12px;
+                border: 1px solid #ffaa7a;
+                object-fit: cover;
+                flex-shrink: 0;
+            }
+
+            .music-info {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                min-width: 0;
+            }
+
+            .song-title {
+                font-size: 0.7rem;
+                font-weight: bold;
+                color: #ffd8bd;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .time-display {
+                display: flex;
+                justify-content: space-between;
+                font-size: 0.55rem;
+                color: #dbbca0;
+            }
+
+            .progress-container {
+                height: 3px;
+                background: rgba(255,255,255,0.2);
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+            .progress-bar {
+                width: 0%;
+                height: 100%;
+                background: #ffaa7a;
+                border-radius: 4px;
+            }
+
+            .music-controls {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                flex-shrink: 0;
+            }
+
+            .control-icon {
+                width: 32px;
+                cursor: pointer;
+            }
+
+            .volume-control {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+            .volume-icon {
+                width: 20px;
+                cursor: pointer;
+            }
+
+            .volume-slider-container {
+                position: relative;
+                width: 80px;
+                height: 3px;
+            }
+
+            .volume-bg {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(255,255,255,0.2);
+                border-radius: 4px;
+            }
+
+            .volume-fill {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 60%;
+                background: #ffaa7a;
+                border-radius: 4px;
+                transition: width 0.05s linear;
+                pointer-events: none;
+            }
+
+            .volume-slider {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+                cursor: pointer;
+                z-index: 2;
+            }
+        }
+
+        @keyframes fadeGlow {
+            0% { opacity: 0; transform: translateY(15px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeGlow 0.6s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="appRoot">
+        <div class="days-counter" id="daysCounter">
+            <p>✨ Llevamos siendo amigos <span id="daysCount">calculando...</span> días ✨</p>
+        </div>
+
+        <div class="envelope" id="envelopeBtn">
+            <h2> 4 años de amistad</h2>
+            <h2> 💌</h2>
+            <p>★ Abrir carta ★</p>
+        </div>
+
+        <div class="game-container" id="gamePanel">
+            <h3><span></span> ¿Cuánto sabes de nosotros? <span></span></h3>
+            <div class="game-subtitle">🎵 Responde las 4 preguntas para desbloquear la carta 🎵</div>
+            
+            <div class="quiz-list" id="quizList">
+                <div class="quiz-item" data-idx="0">
+                    <div class="quiz-question"><span class="quiz-emoji">📅</span> ¿En qué año nos conocimos?</div>
+                    <div class="quiz-input-area">
+                        <input type="text" class="quiz-input" placeholder="Tu respuesta..." autocomplete="off">
+                        <button class="quiz-btn">Responder</button>
+                    </div>
+                    <div class="quiz-status"></div>
+                </div>
+                <div class="quiz-item" data-idx="1">
+                    <div class="quiz-question"><span class="quiz-emoji">🎮</span> ¿Qué juego de Roblox jugamos mucho juntos?</div>
+                    <div class="quiz-input-area">
+                        <input type="text" class="quiz-input" placeholder="Tu respuesta..." autocomplete="off">
+                        <button class="quiz-btn">Responder</button>
+                    </div>
+                    <div class="quiz-status"></div>
+                </div>
+                <div class="quiz-item" data-idx="2">
+                    <div class="quiz-question"><span class="quiz-emoji">🍓</span> ¿Qué comida prometimos comer juntos?</div>
+                    <div class="quiz-input-area">
+                        <input type="text" class="quiz-input" placeholder="Tu respuesta..." autocomplete="off">
+                        <button class="quiz-btn">Responder</button>
+                    </div>
+                    <div class="quiz-status"></div>
+                </div>
+                <div class="quiz-item" data-idx="3">
+                    <div class="quiz-question"><span class="quiz-emoji">🦭</span> ¿Cómo me llamo?</div>
+                    <div class="quiz-input-area">
+                        <input type="text" class="quiz-input" placeholder="Tu respuesta..." autocomplete="off">
+                        <button class="quiz-btn">Responder</button>
+                    </div>
+                    <div class="quiz-status"></div>
+                </div>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-text">Preguntas acertadas: <span id="progressCount">0</span> / 4</div>
+                <div class="progress-bar-bg">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+            <button class="btn-reset" id="resetGameBtn">⟳ Reiniciar preguntas</button>
+        </div>
+
+        <div class="final-letter" id="finalLetter">
+            <div class="deco-corner top-left"></div>
+            <div class="deco-corner bottom-right"></div>
+           <div class="letter-content">
+    <p>Luan,</p>
+    
+    <p>4 años. Se dice rápido pero han pasado muchas cosas. Desde las partidas hasta tarde en Roblox hasta las veces que nos quedamos hasta la madrugada solo para ver si el otro estaba bien. No sé cómo explicarlo, pero contigo siempre sentí que podía ser un desastre y no me ibas a juzgar por eso.</p>
+    
+    <p>Hemos tenido peleas estúpidas, sí. También silencios incómodos. Pero siempre volvemos. Y creo que eso es lo que importa al final: que aunque nos enojemos, aunque a veces seamos unos idiotas, sabemos que el otro está ahí. No es algo que se encuentre todos los días.</p>
+    
+    <p>Me acuerdo cuando me contabas lo del trabajo, lo de tu jefe, y sentí una impotencia terrible. O cuando tu hermana estuvo hospitalizada y estabas hecho mierda pero igual tratabas de seguir. No supe bien qué decir en esos momentos, y tal vez todavía no sé. Pero quería que supieras que me importa. Que no es solo "leer y ya".</p>
+    
+    <p>También me acuerdo de las boludeces, obvio. Los audios de 10 minutos que nunca terminamos de escuchar, los reels sin sentido, el sushi que nunca comimos juntos pero algún día va a pasar. Las veces que nos cagamos de risa de la nada. Eso también pesa, y mucho.</p>
+    
+    <p>No soy bueno con las palabras bonitas ni con los discursos. Pero sí sé que en estos 4 años, de todas las personas que conocí, tú fuiste de las pocas que se quedaron. Y eso, para alguien como yo, vale oro.</p>
+    
+    <p>Así que gracias. Por bancarme, por putearme cuando lo merecía, por reírte de mis estupideces y por estar ahí aunque no digamos nada. Ojalá sean muchos años más de esto. De los juegos, de los kilombos, de los momentos de mierda y los buenos también.</p>
+    
+    <p>Te quiero, Luancito. En serio.</p>
+    
+    <div class="letter-signature">
+        Loey 💙<br>
+        <span style="font-size: 0.8rem;">🗝️ 10/03/2022 </span>
+    </div>
+</div>
+        </div>
+    </div>
+
+    <!-- REPRODUCTOR DE MÚSICA -->
+    <div id="musicPlayer">
+        <img id="albumArt" src="album.png" alt="portada">
+        <div class="music-info">
+            <div class="song-title">BTS - 00:00 (Zero O'Clock)</div>
+            <div class="time-display">
+                <span id="currentTime">0:00</span>
+                <span id="duration">0:00</span>
+            </div>
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+        <div class="music-controls">
+            <svg class="control-icon" id="musicToggle" viewBox="0 0 24 24" width="24" height="24">
+                <path id="playIcon" d="M8 5v14l11-7z" style="display: block;" fill="#ffaa7a"/>
+                <path id="pauseIcon" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" style="display: none;" fill="#ffaa7a"/>
+            </svg>
+            <div class="volume-control" id="volumeControl">
+                <svg class="volume-icon" viewBox="0 0 24 24" width="16" height="16" fill="#ffaa7a">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function(){
+            // ---- CONTADOR DE DÍAS ----
+            function updateDaysCounter() {
+                const startDate = new Date(2022, 2, 10);
+                const today = new Date();
+                const diffTime = today - startDate;
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                const daysSpan = document.getElementById('daysCount');
+                const finalDaysSpan = document.getElementById('finalDaysCount');
+                if (daysSpan) daysSpan.innerText = diffDays;
+                if (finalDaysSpan) finalDaysSpan.innerText = diffDays;
+            }
+            
+            // ---- PREGUNTAS ----
+            const correctAnswers = [
+                { keywords: ["2022"] },
+                { keywords: ["99", "noventa y nueve", "99 noches"] },
+                { keywords: ["sushi"] },
+                { keywords: ["loey"] }
+            ];
+            
+            let correctCount = 0;
+            let quizCompleted = [false, false, false, false];
+            const gamePanel = document.getElementById('gamePanel');
+            const finalLetter = document.getElementById('finalLetter');
+            const envelopeBtn = document.getElementById('envelopeBtn');
+            const resetBtn = document.getElementById('resetGameBtn');
+            const progressCountSpan = document.getElementById('progressCount');
+            const progressFill = document.getElementById('progressFill');
+            
+            function checkAnswer(index, inputElement, statusDiv, quizItem) {
+                if (quizCompleted[index]) return;
+                const userAnswer = inputElement.value.trim().toLowerCase();
+                const keywords = correctAnswers[index].keywords;
+                let isCorrect = false;
+                for (let keyword of keywords) {
+                    if (userAnswer.includes(keyword.toLowerCase())) {
+                        isCorrect = true;
+                        break;
+                    }
+                }
+                if (isCorrect) {
+                    quizCompleted[index] = true;
+                    correctCount++;
+                    statusDiv.innerHTML = '✓ ¡Correcto!';
+                    statusDiv.className = 'quiz-status correct';
+                    quizItem.classList.add('completed');
+                    inputElement.disabled = true;
+                    const btn = quizItem.querySelector('.quiz-btn');
+                    btn.disabled = true;
+                    btn.style.opacity = '0.6';
+                    updateProgress();
+                } else {
+                    statusDiv.innerHTML = '✗ Incorrecto. Intenta de nuevo.';
+                    statusDiv.className = 'quiz-status incorrect';
+                    inputElement.value = '';
+                    inputElement.focus();
+                }
+            }
+            
+            function updateProgress() {
+                progressCountSpan.innerText = correctCount;
+                progressFill.style.width = `${(correctCount / 4) * 100}%`;
+                if (correctCount === 4 && finalLetter.style.display !== 'block') {
+                    setTimeout(() => {
+                        gamePanel.style.display = 'none';
+                        finalLetter.style.display = 'block';
+                        finalLetter.classList.add('fade-in');
+                        updateDaysCounter();
+                    }, 300);
+                }
+            }
+            
+            function resetGame() {
+                if (finalLetter.style.display === 'block') {
+                    finalLetter.style.display = 'none';
+                    gamePanel.style.display = 'block';
+                }
+                correctCount = 0;
+                quizCompleted = [false, false, false, false];
+                const quizItems = document.querySelectorAll('.quiz-item');
+                quizItems.forEach((item) => {
+                    item.classList.remove('completed');
+                    const input = item.querySelector('.quiz-input');
+                    const btn = item.querySelector('.quiz-btn');
+                    const statusDiv = item.querySelector('.quiz-status');
+                    input.disabled = false;
+                    input.value = '';
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                    statusDiv.innerHTML = '';
+                    statusDiv.className = 'quiz-status';
+                });
+                updateProgress();
+                gamePanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            
+            function openEnvelope() {
+                envelopeBtn.style.display = 'none';
+                gamePanel.style.display = 'block';
+                gamePanel.classList.add('fade-in');
+            }
+            
+            const quizItems = document.querySelectorAll('.quiz-item');
+            quizItems.forEach((item, idx) => {
+                const input = item.querySelector('.quiz-input');
+                const button = item.querySelector('.quiz-btn');
+                const statusDiv = item.querySelector('.quiz-status');
+                button.addEventListener('click', () => checkAnswer(idx, input, statusDiv, item));
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        checkAnswer(idx, input, statusDiv, item);
+                    }
+                });
+            });
+            
+            resetBtn.addEventListener('click', resetGame);
+            envelopeBtn.addEventListener('click', openEnvelope);
+            
+            gamePanel.style.display = 'none';
+            finalLetter.style.display = 'none';
+            updateDaysCounter();
+            
+            // ---- MÚSICA Y VOLUMEN ----
+            const audio = new Audio('oclock.mp3');
+            audio.loop = true;
+            audio.volume = 0.6;
+            let isPlaying = false;
+            const playIcon = document.getElementById('playIcon');
+            const pauseIcon = document.getElementById('pauseIcon');
+            const toggleBtn = document.getElementById('musicToggle');
+            const progressBar = document.getElementById('progressBar');
+            const progressContainer = document.getElementById('progressContainer');
+            const currentSpan = document.getElementById('currentTime');
+            const durationSpan = document.getElementById('duration');
+            
+            // Crear barra de volumen con relleno
+            const volumeControl = document.getElementById('volumeControl');
+            const volumeContainer = document.createElement('div');
+            volumeContainer.className = 'volume-slider-container';
+            volumeContainer.innerHTML = `
+                <div class="volume-bg"></div>
+                <div class="volume-fill" id="volumeFill"></div>
+                <input type="range" class="volume-slider" id="volumeSliderInput" min="0" max="1" step="0.01" value="0.6">
+            `;
+            volumeControl.appendChild(volumeContainer);
+            
+            const volumeSlider = document.getElementById('volumeSliderInput');
+            const volumeFill = document.getElementById('volumeFill');
+            
+            function updateVolumeFill(value) {
+                const percent = value * 100;
+                volumeFill.style.width = `${percent}%`;
+            }
+            
+            updateVolumeFill(0.6);
+            
+            volumeSlider.addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                audio.volume = val;
+                updateVolumeFill(val);
+            });
+            
+            function formatTime(sec) {
+                if (isNaN(sec)) return "0:00";
+                const minutes = Math.floor(sec / 60);
+                const seconds = Math.floor(sec % 60);
+                return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            }
+            
+            audio.addEventListener('loadedmetadata', () => {
+                durationSpan.innerText = formatTime(audio.duration);
+            });
+            
+            audio.addEventListener('timeupdate', () => {
+                if (audio.duration) {
+                    const percent = (audio.currentTime / audio.duration) * 100;
+                    progressBar.style.width = `${percent}%`;
+                    currentSpan.innerText = formatTime(audio.currentTime);
+                }
+            });
+            
+            progressContainer.addEventListener('click', (e) => {
+                const rect = progressContainer.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const newTime = (clickX / rect.width) * audio.duration;
+                audio.currentTime = newTime;
+            });
+            
+            toggleBtn.addEventListener('click', () => {
+                if (isPlaying) {
+                    audio.pause();
+                    playIcon.style.display = 'block';
+                    pauseIcon.style.display = 'none';
+                } else {
+                    audio.play().catch(e => console.log("error"));
+                    playIcon.style.display = 'none';
+                    pauseIcon.style.display = 'block';
+                }
+                isPlaying = !isPlaying;
+            });
+            
+            // Música empieza al abrir el juego
+            function startMusic() {
+                if (!isPlaying && audio.paused) {
+                    audio.play().then(() => {
+                        isPlaying = true;
+                        playIcon.style.display = 'none';
+                        pauseIcon.style.display = 'block';
+                    }).catch(() => console.log("Error"));
+                }
+            }
+            
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (gamePanel.style.display === 'block') {
+                        startMusic();
+                        observer.disconnect();
+                    }
+                });
+            });
+            observer.observe(gamePanel, { attributes: true, attributeFilter: ['style'] });
+        })();
+    </script>
+</body>
+</html>
